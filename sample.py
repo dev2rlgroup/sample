@@ -7,7 +7,7 @@ r = 5
 area = calculate_area(r)
 
 print(f"--- Python Build Script ---")
-print(f"--- This is v.2 ---")
+print(f"--- This is v.3 ---")
 print(f"--- Auto building SCM Pooling  ---")
 
 print(f"Radius: {r}")
