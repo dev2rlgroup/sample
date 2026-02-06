@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CI/CD Pipeline Implementation Success</title>
+    <title>CI/CD Pipeline Implementation Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
@@ -19,6 +19,7 @@
             --dark: #2c3e50;
             --light: #f8f9fa;
             --gray: #7f8c8d;
+            --modal-overlay: rgba(0, 0, 0, 0.7);
         }
         
         * {
@@ -331,6 +332,11 @@
             color: white;
         }
         
+        .btn-secondary {
+            background-color: var(--dark);
+            color: white;
+        }
+        
         .btn-outline {
             background-color: transparent;
             color: var(--primary);
@@ -346,6 +352,207 @@
             margin-right: 8px;
         }
         
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--modal-overlay);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: 15px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            background: linear-gradient(to right, var(--dark), var(--primary));
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .modal-header h2 i {
+            margin-right: 15px;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .close-modal:hover {
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .doc-section {
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .doc-section:last-child {
+            border-bottom: none;
+        }
+        
+        .doc-section h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .doc-section h3 i {
+            margin-right: 10px;
+            background-color: var(--primary);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .doc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .doc-table th, .doc-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .doc-table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .doc-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .code-block {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Roboto Mono', monospace;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        
+        .code-block .comment {
+            color: #7f8c8d;
+        }
+        
+        .code-block .command {
+            color: #2ecc71;
+        }
+        
+        .doc-note {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .doc-note i {
+            color: #ff9800;
+            margin-right: 10px;
+        }
+        
+        .architecture-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .flow-step {
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .step-number {
+            background-color: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .step-content h4 {
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        
+        .step-content ul {
+            margin-left: 20px;
+        }
+        
+        .step-content li {
+            margin-bottom: 5px;
+        }
+        
         @media (max-width: 992px) {
             .pipeline-steps {
                 flex-direction: column;
@@ -358,6 +565,11 @@
             
             .step {
                 width: 100%;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 20px auto;
             }
         }
         
@@ -376,6 +588,16 @@
             
             .tools-overview {
                 flex-direction: column;
+            }
+            
+            .modal-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .close-modal {
+                align-self: flex-end;
+                margin-top: -40px;
             }
         }
     </style>
@@ -577,11 +799,11 @@
                 <button class="btn btn-primary" id="viewPipelineBtn">
                     <i class="fas fa-play-circle"></i> Trigger New Pipeline
                 </button>
+                <button class="btn btn-secondary" id="documentationBtn">
+                    <i class="fas fa-book"></i> View Implementation Documentation
+                </button>
                 <button class="btn btn-outline" id="monitoringBtn">
                     <i class="fas fa-chart-bar"></i> View Monitoring Dashboard
-                </button>
-                <button class="btn btn-outline" id="docsBtn">
-                    <i class="fas fa-book"></i> Implementation Documentation
                 </button>
             </div>
         </div>
@@ -593,21 +815,264 @@
         </footer>
     </div>
 
+    <!-- Documentation Modal -->
+    <div class="modal" id="documentationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-book"></i> Jenkins + Ansible CI/CD Pipeline Documentation</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="doc-section">
+                    <h3><i class="fas fa-archway"></i> Architecture Overview (The Flow)</h3>
+                    <p>The deployment process follows a "relay race" model with three stages:</p>
+                    
+                    <div class="architecture-flow">
+                        <div class="flow-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>The Trigger</h4>
+                                <ul>
+                                    <li>Code is pushed to GitHub.</li>
+                                    <li>Jenkins detects the change and pulls the latest <code>index.html</code> into its Workspace.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="flow-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>The Hand-off</h4>
+                                <ul>
+                                    <li>Jenkins triggers an Ansible build step.</li>
+                                    <li>It provides Ansible with the "Map" (<code>hosts.ini</code>) and the "Instructions" (<code>web-app.yml</code>).</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="flow-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>The Deployment</h4>
+                                <ul>
+                                    <li>Ansible calculates the differences and connects to the <code>prod-server</code> via SSH.</li>
+                                    <li>It copies the file to the app directory and instructs Apache to refresh if necessary.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="doc-section">
+                    <h3><i class="fas fa-cogs"></i> Jenkins Build Step Configuration</h3>
+                    <p>When configuring the "Invoke Ansible Playbook" build step in Jenkins, use the following details:</p>
+                    
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Value</th>
+                                <th>Why?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Playbook Path</strong></td>
+                                <td><code>/var/jenkins_home/playbooks/web-app.yml</code></td>
+                                <td>This is the "Instructions" file. We ask Jenkins to look here because we mounted our <code>web-app.yml</code> into this specific directory inside the container.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Inventory</strong></td>
+                                <td><code>/var/jenkins_home/playbooks/hosts.ini</code></td>
+                                <td>This is the "Map". It tells Ansible <em>where</em> to go (the IP address of the prod-server).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="doc-note">
+                        <i class="fas fa-lock"></i>
+                        <strong>Extra Variables (Hidden/Concealed):</strong> Under the "Advanced" or "Extra Variables" section of the build step, we inject sensitive or complex arguments.
+                    </div>
+                    
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th>Why?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>ansible_become_pass</code></td>
+                                <td><em>(Concealed)</em></td>
+                                <td>This passes the <code>sudo</code> password to Ansible to ensure it can escalate privileges without getting stuck at a password prompt.</td>
+                            </tr>
+                            <tr>
+                                <td><code>ansible_ssh_common_args</code></td>
+                                <td><em>(Concealed)</em></td>
+                                <td>This usually contains flags like <code>-o StrictHostKeyChecking=no</code> to prevent build failures if Docker container SSH fingerprints change.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="doc-section">
+                    <h3><i class="fas fa-key"></i> Credentials & Connectivity</h3>
+                    <p>The communication between Jenkins and the Production Server relies on <strong>SSH Key-Based Authentication</strong> (no passwords).</p>
+                    
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>User & Pass of prod-server</strong></td>
+                                <td><code>jenkins</code> <code>jenkins</code> (Running commands inside containers)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>SSH Key</strong></td>
+                                <td><code>/var/jenkins_home/.ssh/id_rsa</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Target Host</strong></td>
+                                <td><code>prod-server</code> (IP defined in <code>playbooks/hosts.ini</code>)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>App Path</strong></td>
+                                <td><code>/var/www/html</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sudo Access</strong></td>
+                                <td>Passwordless (Configured via <code>visudo</code> for <code>become: true</code>)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="doc-section">
+                    <h3><i class="fas fa-terminal"></i> Essential Commands Cheatsheet</h3>
+                    
+                    <h4>1. Manual Ansible Testing (Run from Jenkins Container)</h4>
+                    <p>Use these commands to verify connectivity and configuration without running a full pipeline build.</p>
+                    
+                    <div class="code-block">
+<span class="comment"># The "Heartbeat" Check (Ping):</span>
+<span class="command">ansible prod-server -i /var/jenkins_home/playbooks/hosts.ini -m ping</span>
+
+<span class="comment"># Check Disk Space on Prod:</span>
+<span class="command">ansible prod-server -i /var/jenkins_home/playbooks/hosts.ini -a "df -h"</span>
+
+<span class="comment"># Manually Trigger the Playbook:</span>
+<span class="command">ansible-playbook /var/jenkins_home/playbooks/web-app.yml -i /var/jenkins_home/playbooks/hosts.ini</span>
+                    </div>
+                    
+                    <h4>2. SSH Maintenance (Run from Jenkins Container)</h4>
+                    
+                    <div class="code-block">
+<span class="comment"># Manual Login:</span>
+<span class="command">ssh prod-server</span>
+
+<span class="comment"># Fix "Host Key Verification" Errors:</span>
+<span class="comment"># If the prod-server container is recreated, its fingerprint changes. Update known_hosts:</span>
+<span class="command">ssh-keyscan -H prod-server >> ~/.ssh/known_hosts</span>
+                    </div>
+                    
+                    <h4>3. Troubleshooting the Production Server (Run from Prod-Server Container)</h4>
+                    <p>If deployment succeeds but the site isn't loading, check the server directly.</p>
+                    
+                    <div class="code-block">
+<span class="comment"># Check Apache Status:</span>
+<span class="command">service apache2 status</span>
+<span class="comment"># OR if service command fails:</span>
+<span class="command">ps aux | grep apache</span>
+
+<span class="comment"># View Apache Error Logs:</span>
+<span class="command">tail -f /var/log/apache2/error.log</span>
+
+<span class="comment"># Verify File Permissions:</span>
+<span class="command">ls -la /var/www/html/</span>
+                    </div>
+                </div>
+                
+                <div class="doc-section">
+                    <h3><i class="fab fa-docker"></i> Docker Architecture & Ports</h3>
+                    <p>Current container status as referenced in this setup:</p>
+                    
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th>Container</th>
+                                <th>Image</th>
+                                <th>Port Mapping</th>
+                                <th>Access URL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Production Server (prod-server)</strong></td>
+                                <td><code>ubuntu:latest</code></td>
+                                <td><code>8093:80</code></td>
+                                <td><code>http://localhost:8093</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Jenkins Controller (my-jenkins-9001)</strong></td>
+                                <td><code>jenkins/jenkins:lts</code></td>
+                                <td><code>9001:8080</code></td>
+                                <td><code>http://localhost:9001</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="doc-note">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Note:</strong> Container IDs may change when containers are recreated. Use <code>docker ps</code> to check current container IDs.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Add interactivity to the buttons
-        document.getElementById('viewPipelineBtn').addEventListener('click', function() {
+        // Get modal elements
+        const documentationModal = document.getElementById('documentationModal');
+        const documentationBtn = document.getElementById('documentationBtn');
+        const closeModal = document.getElementById('closeModal');
+        const viewPipelineBtn = document.getElementById('viewPipelineBtn');
+        const monitoringBtn = document.getElementById('monitoringBtn');
+        
+        // Open documentation modal
+        documentationBtn.addEventListener('click', function() {
+            documentationModal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        });
+        
+        // Close modal when X is clicked
+        closeModal.addEventListener('click', function() {
+            documentationModal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        });
+        
+        // Close modal when clicking outside the modal content
+        window.addEventListener('click', function(event) {
+            if (event.target === documentationModal) {
+                documentationModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Add interactivity to other buttons
+        viewPipelineBtn.addEventListener('click', function() {
             alert('New CI/CD pipeline triggered! Jenkins job #42 started.');
             // In a real implementation, this would trigger an API call to Jenkins
         });
         
-        document.getElementById('monitoringBtn').addEventListener('click', function() {
+        monitoringBtn.addEventListener('click', function() {
             alert('Redirecting to monitoring dashboard...');
             // In a real implementation, this would redirect to Grafana/Prometheus dashboard
-        });
-        
-        document.getElementById('docsBtn').addEventListener('click', function() {
-            alert('Opening implementation documentation...');
-            // In a real implementation, this would open documentation
         });
         
         // Add some dynamic updates to metrics
@@ -640,6 +1105,14 @@
                         step.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.08)';
                     }, 500);
                 }, index * 800);
+            });
+            
+            // Add syntax highlighting to code blocks in modal
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                // Convert HTML entities back to actual characters for better display
+                const content = block.innerHTML;
+                block.innerHTML = content.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
             });
         });
     </script>
