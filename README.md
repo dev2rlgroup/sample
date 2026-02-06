@@ -109,6 +109,15 @@ If deployment succeeds but the site isn't loading, check the server directly.
 
 Current container status as referenced in this setup:
 
+
+
+*   **Start your Jenkins engine** 
+    `docker start my-jenkins-9001`
+    `
+ *   **Start your Production Web Server**
+    `docker start prod-server`
+
+
 *   **Production Server (`prod-server`)**:
     *   Image: `ubuntu:latest`
     *   Port Mapping: `8093:80` (Access web application at `localhost:8093`)
