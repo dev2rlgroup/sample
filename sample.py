@@ -7,5 +7,6 @@ r = 5
 area = calculate_area(r)
 
 print(f"--- Python Build Script ---")
+print(f"--- This is v.1 ---")
 print(f"Radius: {r}")
 print(f"The area of the circle is: {area:.2f}")
