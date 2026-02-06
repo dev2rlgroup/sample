@@ -1,0 +1,24 @@
+---
+- name: Upload new code and ReStart the service
+  hosts: prod-server
+  vars:
+    app: apache2
+    # This line removes the pink "Python Discovery" warning
+    ansible_python_interpreter: /usr/bin/python3
+    
+  tasks:
+    - name: Remove old index file
+      become: true
+      file:
+        path: /var/www/html/index.html
+        state: absent
+
+    - name: Place custom HTML File
+      become: true
+      copy:
+        src: /var/jenkins_home/workspace/web-app/index.html
+        dest: /var/www/html/index.html
+
+    - name: Start Apache service manually
+      become: true
+      shell: "apache2ctl restart"
